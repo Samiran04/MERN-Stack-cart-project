@@ -28,7 +28,9 @@ module.exports.increase = async function(req, res){
         });
     }catch(err){
         console.log('Error in Increase', err);
-        return;
+        return res.json(500, {
+            message: 'Unsuccessful'
+        });
     }
 }
 
@@ -47,6 +49,45 @@ module.exports.decrease = async function(req, res){
         });
     }catch(err){
         console.log('Error in Decrease', err);
-        return;
+        return res.json(500, {
+            message: 'Unsuccessful'
+        });
+    }
+}
+
+module.exports.addItem = async function(req, res){
+    try{
+        await Cart.create({
+            name: req.query.name,
+            img: req.query.img,
+            qty: req.query.qty,
+            price: req.query.price
+        });
+
+        return res.json(200, {
+            message: 'Success'
+        });
+    }catch(err){
+        console.log('Error in Add Item', err);
+        return res.json(500, {
+            message: 'Unsuccessful'
+        });
+    }
+}
+
+module.exports.deleteItem = async function(req, res){
+    try{
+
+        await Cart.findByIdAndDelete(req.query.id);
+
+        return res.json(200, {
+            message: 'Success'
+        });
+    }catch(err)
+    {
+        console.log('Error in Delete Item', err);
+        return res.json(500, {
+            message: 'Unsuccessful'
+        }); 
     }
 }

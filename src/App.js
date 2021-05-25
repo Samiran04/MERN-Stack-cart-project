@@ -11,8 +11,49 @@ class App extends React.Component {
           products: [
               
           ],
-          test_message: {}
+          test_message: {},
+          name: '',
+          qty: null,
+          img: '',
+          price: null
       }
+  }
+
+  mySubmitForm = (event) => {
+    event.preventDefault();
+    const {products} = this.state;
+    const {qty} = this.state;
+    const {name} = this.state;
+    const {price} = this.state;
+    const {img} = this.state;
+
+    let obj = {
+      name: name,
+      qty: qty,
+      img: img,
+      price: price
+    };
+
+    let route = 'http://localhost:8000/add-item/?name=' + name + '&qty=' + qty + '&price=' + price + '&img=' + img;
+
+    fetch(route)
+    .then((res) => {
+      
+    }).catch((err)=>{
+      console.log(err);
+    })
+
+    products.push(obj);
+
+    this.setState({
+      products: products
+    })
+  }
+
+  myChangeHandler = (event) => {
+    let nam = event.target.name;
+    let val = event.target.value;
+    this.setState({[nam]: val});
   }
 
   callAPI = () =>{
@@ -82,7 +123,16 @@ class App extends React.Component {
   deleteItem = (key) => {
     let {products} = this.state;
 
-    let items = products.filter((product) => product.id !== key);
+    let items = products.filter((product) => product._id !== key);
+
+    let route = 'http://localhost:8000/delete-item/?id=' + key;
+
+    fetch(route)
+    .then((res) => {
+      
+    }).catch((err)=>{
+      console.log(err);
+    })
 
     this.setState({
         products: items
@@ -111,6 +161,9 @@ class App extends React.Component {
         increaseQuantity = {this.increaseQuantity}
         decreaseQuantity = {this.decreaseQuantity}
         deleteItem = {this.deleteItem}
+        addItem = {this.addItem}
+        myChangeHandler = {this.myChangeHandler}
+        mySubmitForm = {this.mySubmitForm}
         />   
       </div>
     );
